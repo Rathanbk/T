@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Test.Models.Expense>
+@inject SignInManager<IdentityUser> signInManager;
+
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-9">
+            <h2 class="text-primary">Expenses</h2>
+        </div>
+        <div class="col-3 text-right">
+            <a asp-controller="Expense" asp-action="Create" class="btn btn-primary">Create new Expense </a>
+        </div>
+    </div>
+    <br />
+
+
+    @if (Model?.Count() > 0)
+    {
+        <table class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        Expense Name
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Changes
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td width="35%">@item.ExpenseName</td>
+                        <td width="35%">@item.Amount</td>
+                        <td width="30%">
+                            <div class="w-100 btn-group" role="group">
+                                @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                                {<a asp-controller="Expense" asp-action="Update" asp-route-Id="@item.Id" class="btn btn-primary mx-1">Update</a>
+                                 <a asp-controller="Expense" asp-action="Delete" asp-route-Id="@item.Id" class="btn btn-danger mx-1">Delete</a>
+                                }</div>
+
+                            </td>
+                        </tr>
+                    }
+            </tbody>
+
+        </table>
+    }
+    else
+    {
+        <p>No items created yet</p>
+    }
+
+</div>
